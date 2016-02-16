@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html data-ng-app="WonderEquips">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Cache-Control" content="no-cache"/> 
+	<meta http-equiv="Pragma" content="no-cache"/>
+	<meta http-equiv="Expires" content="0"/> 
+	<title>WonderEquips</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/bootstrap-theme.css">
+	<link rel="stylesheet" href="css/app.css">
+	<script src="script/jquery.js"></script>
+	<script src="script/angular.js"></script>
+	<script src="script/app.js"></script>
+	<script src="script/data.js"></script>
+	<!--
+	<script src="script/jquery.min.js"></script>
+	<script src="script/bootstrap.js"></script>
+	<script src="script/index.js"></script>
+	<script src="data/page.json"></script>
+	<link rel="stylesheet" href="css/bootstrap-theme.css">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/default.css">
+	<link rel="stylesheet" href="css/index.css">
+	-->
+</head>
+<body>
+
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<a class="navbar-brand" href="#">WonderEquips</a>
+		<!-- <ul class="nav navbar-nav">
+			<li class="active"><a href="#">Link A</a></li>
+			<li><a href="#">Link B</a></li>
+			<li><a href="#">Link C</a></li>
+		</ul> -->
+	</nav>
+	
+	<div class="container" 
+		data-ng-controller="WEController"
+		data-ng-init="init()">
+	
+		<table id="part-selector">
+			<tr>
+				<td data-ng-click="selectPart(0)"
+					data-ng-class="currentPart == 0 ? 'selected' : ''">무기</td>							
+				<td data-ng-click="selectPart(1)"
+					data-ng-class="currentPart == 1 ? 'selected' : ''">방어구</td>
+				<td data-ng-click="selectPart(2)"
+					data-ng-class="currentPart == 2 ? 'selected' : ''">악세사리</td>
+			</tr>
+		</table>
+	
+		<table id="shape-selector">
+			<tr>
+				<td data-ng-click="selectShape(0)">원</td>							
+				<td data-ng-click="selectShape(1)">마름모</td>
+				<td data-ng-click="selectShape(2)">사각형</td>
+			</tr>
+			<tr>
+				<td data-ng-click="selectShape(3)">세모</td>							
+				<td data-ng-click="selectShape(4)">하트</td>
+				<td data-ng-click="selectShape(5)">공통</td>
+			</tr>
+		</table>
+	
+		<ul id="result" class="list-group"
+			data-ng-show="result != null && result.length > 0">
+			<li class="list-group-item">Result :</li>
+			<li class="list-group-item" data-ng-repeat="c in champs">
+				{{c.name}}
+			</li>
+		</ul>
+	
+	</div>
+
+</body>
+</html>
