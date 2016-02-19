@@ -23,6 +23,15 @@ table td.selected {
 }
 
 table#part-selector td { padding: 10px; }
-table#shape-selector td { padding: 25px; }
+
+table#shape-selector td { padding: 16px; }
+table#shape-selector img { widht: 32px; height: 32px; }
+
+div#preview { margin-bottom: 15px; text-align: center; }
+div#preview img { margin: 8px; widht: 32px; height: 32px; }
+
+table#executor td { padding: 10px; }
+table#executor td:first-child { width: 66%; }
 
 ul#result li:first-child { background-color: #eee; }
+ul#result li .grade img {  }

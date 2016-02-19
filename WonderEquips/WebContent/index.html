@@ -53,22 +53,43 @@
 	
 		<table id="shape-selector">
 			<tr>
-				<td data-ng-click="selectShape(0)">원</td>							
-				<td data-ng-click="selectShape(1)">마름모</td>
-				<td data-ng-click="selectShape(2)">사각형</td>
+				<td data-ng-click="selectShape(0)"><img class="icon" src="image/circle.png"/></td>							
+				<td data-ng-click="selectShape(1)"><img class="icon" src="image/diamond.png"/></td>
+				<td data-ng-click="selectShape(2)"><img class="icon" src="image/square.png"/></td>
 			</tr>
 			<tr>
-				<td data-ng-click="selectShape(3)">세모</td>							
-				<td data-ng-click="selectShape(4)">하트</td>
-				<td data-ng-click="selectShape(5)">공통</td>
+				<td data-ng-click="selectShape(3)"><img class="icon" src="image/triangle.png"/></td>
+				<td data-ng-click="selectShape(4)"><img class="icon" src="image/heart.png"/></td>
+				<td data-ng-click="selectShape(5)"><img class="icon" src="image/star_black.png"/></td>
+			</tr>
+		</table>
+		
+		<div id="preview">
+			<img src="image/circle.png" data-ng-repeat="_ in range(selectedShapes[0]) track by $index"/>
+			<img src="image/diamond.png" data-ng-repeat="_ in range(selectedShapes[1]) track by $index"/>
+			<img src="image/square.png" data-ng-repeat="_ in range(selectedShapes[2]) track by $index"/>
+			<img src="image/triangle.png" data-ng-repeat="_ in range(selectedShapes[3]) track by $index"/>
+			<img src="image/heart.png" data-ng-repeat="_ in range(selectedShapes[4]) track by $index"/>
+			<img src="image/star_black.png" data-ng-repeat="_ in range(selectedShapes[5]) track by $index"/>
+		</div>
+		
+		<table id="executor">
+			<tr>
+				<td data-ng-click="search()">검색</td>							
+				<td data-ng-click="reset()">초기화</td>
 			</tr>
 		</table>
 	
 		<ul id="result" class="list-group"
 			data-ng-show="result != null && result.length > 0">
 			<li class="list-group-item">Result :</li>
-			<li class="list-group-item" data-ng-repeat="c in champs">
-				{{c.name}}
+			<li class="list-group-item" data-ng-repeat="champ in result">
+				<div class="header">
+					<span class="name">{{champ.name}}</span>
+					<span class="grade">
+						<img src="image/star_white.png" data-ng-repeat="_ in range(champ.grade) track by $index"/>
+					</span>
+				</div>
 			</li>
 		</ul>
 	
