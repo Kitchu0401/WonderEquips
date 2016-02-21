@@ -34,4 +34,5 @@ table#executor td { padding: 10px; }
 table#executor td:first-child { width: 66%; }
 
 ul#result li:first-child { background-color: #eee; }
-ul#result li .grade img {  }
+ul#result li span { margin-right: 16px; }
+ul#result li span.grade img { widht: 16px; height: 16px; }

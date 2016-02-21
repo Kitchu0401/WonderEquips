@@ -89,6 +89,8 @@
 					<span class="grade">
 						<img src="image/star_white.png" data-ng-repeat="_ in range(champ.grade) track by $index"/>
 					</span>
+					<span class="type">{{getChampElement(champ.element)}}</span>
+					<span class="type">{{getChampType(champ.type)}}</span>
 				</div>
 			</li>
 		</ul>

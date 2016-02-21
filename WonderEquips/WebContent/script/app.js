@@ -52,6 +52,16 @@ angular.module('WonderEquips', [])
 		}
 	}
 	
+	// display functions
+	$scope.getChampElement = function(index) {
+		return ["불", "물", "나무", "빛", "어둠"][index] + "속성";
+	}
+	
+	$scope.getChampType = function(index) {
+		return ["공격형", "방어형", "지원형"][index];
+	}
+	
+	// private functions
 	$scope.check = function(req) {
 		var unsolved = 0;
 		for (var i = 0; i < req.length; i++) {
