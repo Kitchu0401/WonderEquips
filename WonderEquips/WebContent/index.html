@@ -1,39 +1,66 @@
 <!DOCTYPE html>
 <html data-ng-app="WonderEquips">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta http-equiv="Cache-Control" content="no-cache"/> 
-	<meta http-equiv="Pragma" content="no-cache"/>
-	<meta http-equiv="Expires" content="0"/> 
-	<title>WonderEquips</title>
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/bootstrap-theme.css">
-	<link rel="stylesheet" href="css/app.css">
-	<script src="script/jquery.js"></script>
-	<script src="script/angular.js"></script>
-	<script src="script/app.js"></script>
-	<script src="script/data.js"></script>
-	<!--
-	<script src="script/jquery.min.js"></script>
-	<script src="script/bootstrap.js"></script>
-	<script src="script/index.js"></script>
-	<script src="data/page.json"></script>
-	<link rel="stylesheet" href="css/bootstrap-theme.css">
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/default.css">
-	<link rel="stylesheet" href="css/index.css">
-	-->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="no-cache"/> 
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/> 
+<title>WonderEquips</title>
+<link rel="stylesheet" href="css/bootstrap.css">
+<script src="script/jquery.js"></script>
+<script src="script/angular.js"></script>
+<script src="script/app.js"></script>
+<script src="script/data.js"></script>
+<style type="text/css">
+body { padding-top: 70px; }
+
+nav.navbar p { margin-right: 15px; }
+
+table {
+	border: 1px solid #ddd;
+	margin-left: auto; 
+	margin-right: auto;
+	margin-bottom: 15px;
+	width: 100%;
+}
+
+table td {
+	border: 1px solid #ddd;
+	cursor: pointer;
+	padding: 25px;
+	width: 33%;
+	text-align: center;
+}
+
+table td.selected {
+	background-color: #eee;
+}
+
+table#part-selector td { padding: 10px; }
+
+table#shape-selector td { padding: 16px; }
+table#shape-selector img { widht: 32px; height: 32px; }
+
+div#preview { margin-bottom: 15px; text-align: center; }
+div#preview img { margin: 8px; widht: 32px; height: 32px; }
+
+table#executor td { padding: 10px; }
+table#executor td:first-child { width: 66%; }
+
+ul#result li:first-child { background-color: #eee; }
+ul#result li span { margin-right: 16px; }
+ul#result li span.grade img { widht: 16px; height: 16px; }
+ul#result li .body { text-align: center; }
+ul#result li .body div.skill { display: inline-block; width: 25%; min-width: 60px; }
+ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px; }
+</style>
 </head>
 <body>
 
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<a class="navbar-brand" href="#">WonderEquips</a>
-		<!-- <ul class="nav navbar-nav">
-			<li class="active"><a href="#">Link A</a></li>
-			<li><a href="#">Link B</a></li>
-			<li><a href="#">Link C</a></li>
-		</ul> -->
+		<p class="navbar-text navbar-right">created by Kitchu</p>
 	</nav>
 	
 	<div class="container" 
@@ -91,6 +118,38 @@
 					</span>
 					<span class="type">{{getChampElement(champ.element)}}</span>
 					<span class="type">{{getChampType(champ.type)}}</span>
+				</div>
+				<div class="body">
+					<div class="panel panel-default skill" style="opacity: 0.2;">
+						<div class="panel-heading">무기</div>	
+						<div class="panel-body">
+							<img src="image/circle.png" data-ng-repeat="_ in range(champ.skill[0][0]) track by $index"/>
+							<img src="image/diamond.png" data-ng-repeat="_ in range(champ.skill[0][1]) track by $index"/>
+							<img src="image/square.png" data-ng-repeat="_ in range(champ.skill[0][2]) track by $index"/>
+							<img src="image/triangle.png" data-ng-repeat="_ in range(champ.skill[0][3]) track by $index"/>
+							<img src="image/heart.png" data-ng-repeat="_ in range(champ.skill[0][4]) track by $index"/>
+						</div>
+					</div>
+					<div class="panel panel-default skill">
+						<div class="panel-heading">방어구</div>	
+						<div class="panel-body">
+							<img src="image/circle.png" data-ng-repeat="_ in range(champ.skill[1][0]) track by $index"/>
+							<img src="image/diamond.png" data-ng-repeat="_ in range(champ.skill[1][1]) track by $index"/>
+							<img src="image/square.png" data-ng-repeat="_ in range(champ.skill[1][2]) track by $index"/>
+							<img src="image/triangle.png" data-ng-repeat="_ in range(champ.skill[1][3]) track by $index"/>
+							<img src="image/heart.png" data-ng-repeat="_ in range(champ.skill[1][4]) track by $index"/>
+						</div>
+					</div>
+					<div class="panel panel-default skill">
+						<div class="panel-heading">악세사리</div>	
+						<div class="panel-body">
+							<img src="image/circle.png" data-ng-repeat="_ in range(champ.skill[2][0]) track by $index"/>
+							<img src="image/diamond.png" data-ng-repeat="_ in range(champ.skill[2][1]) track by $index"/>
+							<img src="image/square.png" data-ng-repeat="_ in range(champ.skill[2][2]) track by $index"/>
+							<img src="image/triangle.png" data-ng-repeat="_ in range(champ.skill[2][3]) track by $index"/>
+							<img src="image/heart.png" data-ng-repeat="_ in range(champ.skill[2][4]) track by $index"/>
+						</div>
+					</div>
 				</div>
 			</li>
 		</ul>
