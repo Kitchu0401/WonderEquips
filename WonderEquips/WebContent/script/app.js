@@ -2,11 +2,17 @@
  * Made by Kitchu
  * 2016-02-16
  */
-angular.module('WonderEquips', [])
-.controller('WEController', function($scope){
+angular.module('WonderEquips', ['ngCookies'])
+.controller('WEController', ['$scope', '$cookies', function($scope, $cookies) {
+	
+	$scope.elementTag = ['불', '물', '나무', '빛', '어둠'];
+	$scope.typeTag = ['공격형', '방어형', '지원형'];
+	$scope.skillTag = ['무기', '방어구', '악세서리'];
 	
 	$scope.init = function() {
 		// retrieve user cookie data
+		$scope.weuserdata = $cookies.getObject('weuserdata');
+		console.log($scope.weuserdata);
 		
 		// reset all selector
 		$scope.reset();
@@ -44,8 +50,6 @@ angular.module('WonderEquips', [])
 		$scope.result = [];
 		for (idx in champs) {
 			var req = champs[idx].skill[$scope.currentPart];
-			console.log(req);
-			
 			if (req && $scope.check(req)) {
 				$scope.result.push(champs[idx]);
 			}
@@ -54,11 +58,15 @@ angular.module('WonderEquips', [])
 	
 	// display functions
 	$scope.getChampElement = function(index) {
-		return ["불", "물", "나무", "빛", "어둠"][index] + "속성";
+		return $scope.elementTag[index] + '속성';
 	}
 	
 	$scope.getChampType = function(index) {
-		return ["공격형", "방어형", "지원형"][index];
+		return $scope.typeTag[index];
+	}
+	
+	$scope.getSkillOpacity = function(index) {
+		return {'opacity': $scope.currentPart == index ? '1.0' : '0.2'};
 	}
 	
 	// private functions
@@ -77,5 +85,5 @@ angular.module('WonderEquips', [])
 		return new Array(n);
 	}
 	
-});
+}]);
 
