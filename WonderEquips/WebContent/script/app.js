@@ -3,7 +3,7 @@
  * 2016-02-16
  */
 angular.module('WonderEquips', ['ngCookies'])
-.controller('WEController', ['$scope', '$cookies', function($scope, $cookies) {
+.controller('MainController', ['$scope', '$cookies', function($scope, $cookies) {
 	
 	$scope.elementTag = ['불', '물', '나무', '빛', '어둠'];
 	$scope.typeTag = ['공격형', '방어형', '지원형'];
@@ -12,10 +12,18 @@ angular.module('WonderEquips', ['ngCookies'])
 	$scope.init = function() {
 		// retrieve user cookie data
 		$scope.weuserdata = $cookies.getObject('weuserdata');
-		console.log($scope.weuserdata);
+//		if ($scope.weuserdata) {
+//			alert($scope.weuserdata.name);
+//		}
+		
+		$cookies.putObject('weuserdata', {name: 'kitchu'});
 		
 		// reset all selector
 		$scope.reset();
+	}
+	
+	$scope.openChampPopup = function() {
+		console.log('pressed!');
 	}
 	
 	$scope.selectPart = function(i) {
