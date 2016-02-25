@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import org.json.simple.JSONArray;
@@ -55,7 +57,24 @@ public class ParserMain {
 			results.add(champ);
 		}
 		
+		Collections.sort(results, new Comparator<JSONObject>() {
+
+			@Override
+			public int compare(JSONObject o1, JSONObject o2) {
+				if (Integer.parseInt(o1.get("element").toString()) != Integer.parseInt(o2.get("element").toString())) {
+					return Integer.parseInt(o1.get("element").toString()) - Integer.parseInt(o2.get("element").toString());
+				} else if (Integer.parseInt(o2.get("grade").toString()) != Integer.parseInt(o1.get("grade").toString())) {
+					return Integer.parseInt(o2.get("grade").toString()) - Integer.parseInt(o1.get("grade").toString());
+				} else if (!o1.get("name").toString().equals(o2.get("name").toString())) {
+					return o1.get("name").toString().compareTo(o2.get("name").toString());
+				} else {
+					return 0;
+				}
+			}
+		});
+		
 		System.out.println(results.toString().replaceAll("\"", ""));
+		System.out.println(results.size() + " champ data generated.");
 	}
 	
 	private static int getElementIndex(String value) throws Exception {
