@@ -9,12 +9,10 @@
 <meta http-equiv="Expires" content="0"/> 
 <title>WonderEquips</title>
 <link rel="stylesheet" href="css/bootstrap.css">
-<link rel="stylesheet" href="css/ngDialog.css">
-<link rel="stylesheet" href="css/ngDialog-theme-default.css">
 <script src="script/jquery.js"></script>
 <script src="script/angular.js"></script>
 <script src="script/angular-cookies.js"></script>
-<script src="script/ngDialog.js"></script>
+<script src="script/bootstrap.js"></script>
 <script src="script/app.js"></script>
 <script src="script/data.js"></script>
 <style type="text/css">
@@ -60,21 +58,24 @@ ul#result li span.grade img { widht: 16px; height: 16px; }
 ul#result li .body { text-align: center; }
 ul#result li .body div.skill { display: inline-block; margin: 12px 8px; width: 20%; min-width: 120px; }
 ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px; }
+
+.modal-dialog { height: 90%; }
+.modal-content { height: 100%; }
+.modal-body { max-height: calc(100% - 80px); overflow-y: scroll; }
+.form-inline .form-group > * { margin-left: 6px; margin-right: 6px; }
 </style>
 </head>
-<body>
+<body data-ng-controller="MainController" data-ng-init="init()">
 
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<a class="navbar-brand" href="#">WonderEquips</a>
-		<p class="navbar-text navbar-right">created by Kitchu</p>
-		<p class="navbar-text navbar-right btn-user" data-ng-click="openChampPopup()">
-			User Setting <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+		<!-- <p class="navbar-text navbar-right">created by Kitchu</p> -->
+		<p class="navbar-text navbar-right btn-user" data-toggle="modal" data-target="#popup">
+			Watched <span class="badge">{{watchedChampCount}}</span>
 		</p>
 	</nav>
 	
-	<div class="container" 
-		data-ng-controller="MainController"
-		data-ng-init="init()">
+	<div class="container">
 	
 		<table id="part-selector">
 			<tr>
@@ -119,7 +120,7 @@ ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px;
 		<ul id="result" class="list-group"
 			data-ng-show="result != null && result.length > 0">
 			<li class="list-group-item">Result :</li>
-			<li class="list-group-item" data-ng-repeat="champ in result">
+			<li class="list-group-item" data-ng-repeat="champ in result | orderBy: ['watch']">
 				<div class="header">
 					<span class="name">{{champ.name}}</span>
 					<span class="grade">
@@ -127,6 +128,9 @@ ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px;
 					</span>
 					<span class="type">{{getChampElement(champ.element)}}</span>
 					<span class="type">{{getChampType(champ.type)}}</span>
+					<span class="glyphicon glyphicon-ok pull-right" 
+						style="color: green;"
+						data-ng-show="champ.watch"></span>
 				</div>
 				<div class="body">
 					<div class="panel panel-default skill" 
@@ -147,10 +151,44 @@ ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px;
 		</ul>
 	
 	</div>
-	
-	<script type="text/ng-template">
-		<h1>MMM</h1>
-	</script>
-	
+
+	<div class="modal fade" id="popup" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<form class="form-inline">
+						<div class="form-group">
+							<label for="popupSearchText">영웅이름검색</label>						
+							<input id="popupSearchText" type="text" class="form-control"
+								data-ng-model="popupSearchText"> 
+						</div>
+						<div class="form-group">
+							<a href="#" class="btn btn-default"
+								data-ng-click="toggleIncludeEmpty()"
+								data-ng-class="getClassIncludeEmpty()">
+								스킬 미보유 영웅 포함
+								<span class="glyphicon glyphicon-ok" 
+									data-ng-show="includeEmpty"></span>
+							</a>
+						</div>
+					</form>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group">
+						<li class="list-group-item" 
+							data-ng-repeat="champ in champs | orderBy: 'name' | filter: searchFilter"
+							data-ng-click="toggleWatch(champ.id)">
+							{{champ.name}}
+							<span class="glyphicon glyphicon-ok pull-right" 
+								style="color: green;"
+								data-ng-show="champ.watch"></span>
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>
