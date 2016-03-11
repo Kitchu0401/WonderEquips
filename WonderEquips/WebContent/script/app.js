@@ -15,13 +15,16 @@ angular.module('WonderEquips', ['ngCookies'])
 		$scope.champs = champs;
 		
 		// retrieve user cookie data
+		var version = $cookies.get('we.version');
+		$scope.token = $cookies.get('we.user.token');
+		
 		var includeEmpty = $cookies.get('we.user.includeempty');
 		$scope.includeEmpty = includeEmpty ? includeEmpty : false;
-		console.log($scope.includeEmpty);
 		
 		var watchids = $cookies.get('we.user.watchids');
+		var ids;
 		if (watchids) {
-			var ids = watchids.split(',');
+			ids = watchids.split(',');
 			$scope.watchedChampCount = ids.length;
 			
 			for (var i = 0; i < ids.length; i++) {
@@ -34,6 +37,19 @@ angular.module('WonderEquips', ['ngCookies'])
 			}
 		}
 		
+		// if cached version is outdated, refresh cookie data
+		// and re-load all watchids to server
+		if (version != app.currentVersion) {
+			// update cached version
+			$cookies.put('we.version', app.currentVersion);
+			
+			// update cached user token
+			$scope.token = new Date().getTime();
+			$cookies.put('we.user.token', $scope.token);
+			
+			console.log('Request loading watchids data to server.');
+			$scope.load(watchids);
+		}
 		
 		// reset all selector
 		$scope.reset();
@@ -75,7 +91,7 @@ angular.module('WonderEquips', ['ngCookies'])
 		$scope.result = [];
 		for (idx in $scope.champs) {
 			var req = $scope.champs[idx].skill[$scope.currentPart];
-			if (req && $scope.check(req)) {
+			if (($scope.includeEmpty) || req && $scope.check(req)) {
 				$scope.result.push($scope.champs[idx]);
 			}
 		}
@@ -126,6 +142,9 @@ angular.module('WonderEquips', ['ngCookies'])
 		for (var i = 0; i < $scope.champs.length; i++) {
 			if ($scope.champs[i].id == id) {
 				$scope.champs[i].watch = !$scope.champs[i].watch;
+				if ($scope.champs[i].watch) {
+					$scope.load($scope.champs[i].id);
+				}
 				break;
 			}
 		}
@@ -133,8 +152,15 @@ angular.module('WonderEquips', ['ngCookies'])
 		$cookies.put('we.user.watchids', $scope.getWatchedChampIds());
 	}
 	
-	$scope.test = function() {
-		console.log($scope.popupSearchText);
+	// data load function
+	$scope.load = function(ids) {
+		$.ajax({
+			url: '/WonderEquips/service/load' 
+				+ '/' + app.currentVersion
+				+ '/' + $scope.token
+				+ '/' + ids,
+			method: 'POST'
+		});
 	}
 	
 	// utility functions
