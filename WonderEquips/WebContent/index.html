@@ -121,7 +121,7 @@ ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px;
 		<ul id="result" class="list-group"
 			data-ng-show="result != null && result.length > 0">
 			<li class="list-group-item">Result :</li>
-			<li class="list-group-item" data-ng-repeat="champ in result | orderBy: ['watch']">
+			<li class="list-group-item" data-ng-repeat="champ in result | orderBy: ['watch', 'element', 'grade']">
 				<div class="header">
 					<span class="name">{{champ.name}}</span>
 					<span class="grade">

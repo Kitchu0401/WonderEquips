@@ -40,6 +40,8 @@ angular.module('WonderEquips', ['ngCookies'])
 		// if cached version is outdated, refresh cookie data
 		// and re-load all watchids to server
 		if (version != app.currentVersion) {
+			console.log('Update user version info and create new user token.');
+			
 			// update cached version
 			$cookies.put('we.version', app.currentVersion);
 			
@@ -47,8 +49,10 @@ angular.module('WonderEquips', ['ngCookies'])
 			$scope.token = new Date().getTime();
 			$cookies.put('we.user.token', $scope.token);
 			
-			console.log('Request loading watchids data to server.');
-			$scope.load(watchids);
+			if (watchids) {
+				console.log('Request to load prewatched ids data to server.');
+				$scope.load(watchids);
+			}
 		}
 		
 		// reset all selector
