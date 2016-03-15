@@ -23,7 +23,9 @@ public class WEService {
 			@PathParam("token") String token,
 			@PathParam("ids") String ids) {
 		
-		LOGGER.info("Request inc. version:'" + version + "' token: '" + token + "' ids: '" + ids + "'");
+		LOGGER.info(String.format(
+				"Request inc. version:'%s' token: '%s' ids: '%s'",
+				version, token, ids));
 		
 		String[] idsArr = ids.split(",");
 		if (idsArr.length == 1 && idsArr[0].trim().length() <= 0) {
@@ -34,11 +36,8 @@ public class WEService {
 			MySQLConnector.insertData(version, token, idsArr);
 		}
 		
+		LOGGER.info("  -- successfully loaded.");
 		return Response.status(Status.OK).build();
-	}
-	
-	public static void main(String[] args) {
-		MySQLConnector.insertData("1.2", "duptest", new String[]{"7","8"});
 	}
 	
 }
