@@ -17,6 +17,19 @@ public class WEService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WEService.class);
 	
 	@POST
+	@Path("/log/{version}/{token}")
+	public Response log(
+			@PathParam("version") String version,
+			@PathParam("token") String token) {
+		
+		LOGGER.info(String.format("Page access inc. version:'%s' token: '%s'", version, token));
+		
+		MySQLConnector.insertAccessLog(version, token);
+		
+		return Response.status(Status.OK).build();
+	}
+	
+	@POST
 	@Path("/load/{version}/{token}/{ids}")
 	public Response loadData(
 			@PathParam("version") String version,

@@ -20,7 +20,8 @@ public class MySQLConnector {
 	private static final String DB_PW = "apdoer1234";
 	
 	// queries
-	private static final String QUERY_INSERT = " INSERT IGNORE INTO watchids VALUES (?, ?, ?) ";
+	private static final String QUERY_INSERT_ACCESS_LOG = " INSERT INTO log_access VALUES (?, ?, now()) ";
+	private static final String QUERY_INSERT_DATA = " INSERT IGNORE INTO watchids VALUES (?, ?, ?) ";
 	
 	private static Connection connection;
 	
@@ -38,6 +39,28 @@ public class MySQLConnector {
 		return connection;
 	}
 	
+	public static int insertAccessLog(String version, String token) {
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		
+		int resultCount = 0;
+		
+		try {
+			connection = getConnection();
+			pstmt = connection.prepareStatement(QUERY_INSERT_ACCESS_LOG);
+			pstmt.setString(1, version);
+			pstmt.setString(2, token);
+			resultCount = pstmt.executeUpdate();
+			
+			LOGGER.info(String.format("Row inserted: [%s][%s]", version, token));
+		} catch (Exception e) {
+			LOGGER.error("An error occured in processing DB task :");
+			e.printStackTrace();
+		}
+		
+		return resultCount;
+	}
+	
 	public static int insertData(String version, String token, String id) {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
@@ -46,7 +69,7 @@ public class MySQLConnector {
 		
 		try {
 			connection = getConnection();
-			pstmt = connection.prepareStatement(QUERY_INSERT);
+			pstmt = connection.prepareStatement(QUERY_INSERT_DATA);
 			pstmt.setString(1, version);
 			pstmt.setString(2, token);
 			pstmt.setInt(3, Integer.parseInt(id));
@@ -71,7 +94,7 @@ public class MySQLConnector {
 		
 		try {
 			connection = getConnection();
-			pstmt = connection.prepareStatement(QUERY_INSERT);
+			pstmt = connection.prepareStatement(QUERY_INSERT_DATA);
 			
 			for (String id : ids) {
 				pstmt.setString(1, version);

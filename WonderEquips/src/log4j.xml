@@ -11,14 +11,16 @@
 	</appender>
 
 	<!-- DailyRollingFileAppender test용 info 로그 -->
+	<!--
 	<appender name="dailyrollinginfo" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="Threshold" value="INFO" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<param name="File" value="/lazecrew/log/WonderEquips/we.info.log" />
+		<param name="File" value="/home/ubuntu/log/WonderEquips/we.info.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %p [%C{10}] %m%n" />
 		</layout>
 	</appender>
+	-->
 
 	<logger name="team.lazecrew.service" additivity="false">
 		<level value="DEBUG" />

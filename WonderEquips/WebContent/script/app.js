@@ -55,6 +55,9 @@ angular.module('WonderEquips', ['ngCookies'])
 			}
 		}
 		
+		// send access log to server
+		$scope.log();
+		
 		// reset all selector
 		$scope.reset();
 	}
@@ -154,6 +157,16 @@ angular.module('WonderEquips', ['ngCookies'])
 		}
 		
 		$cookies.put('we.user.watchids', $scope.getWatchedChampIds());
+	}
+	
+	// send access log function
+	$scope.log = function() {
+		$.ajax({
+			url: '/WonderEquips/service/log' 
+				+ '/' + app.currentVersion
+				+ '/' + $scope.token,
+			method: 'POST'
+		});
 	}
 	
 	// data load function
