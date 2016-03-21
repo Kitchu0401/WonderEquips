@@ -56,7 +56,7 @@ angular.module('WonderEquips', ['ngCookies'])
 		}
 		
 		// send access log to server
-		$scope.log();
+//		$scope.log();
 		
 		// reset all selector
 		$scope.reset();
@@ -98,7 +98,7 @@ angular.module('WonderEquips', ['ngCookies'])
 		$scope.result = [];
 		for (idx in $scope.champs) {
 			var req = $scope.champs[idx].skill[$scope.currentPart];
-			if (($scope.includeEmpty) || req && $scope.check(req)) {
+			if (($scope.includeEmpty && !req) || req && $scope.check(req)) {
 				$scope.result.push($scope.champs[idx]);
 			}
 		}

@@ -1,4 +1,4 @@
-package team.lazecrew.service.connector;
+package team.lazecrew.connector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +12,12 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 public class MySQLConnector {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MySQLConnector.class);
+	
+//	private static final String DB_ADDR = "localhost";
+//	private static final String DB_PORT = "3306";
+//	private static final String DB_SCHM = "we";
+//	private static final String DB_ID = "root";
+//	private static final String DB_PW = "kitchu0401";
 	
 	private static final String DB_ADDR = "apdoer.ciszfmxklhbp.ap-northeast-2.rds.amazonaws.com";
 	private static final String DB_PORT = "3306";
@@ -32,7 +38,7 @@ public class MySQLConnector {
 			// create new connection
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			connection = DriverManager.getConnection(String.format(
-					"jdbc:mysql://%s:%s/%s?user=%s&password=%s", 
+					"jdbc:mysql://%s:%s/%s?user=%s&password=%s&connectTimeout=3000", 
 					DB_ADDR, DB_PORT, DB_SCHM, DB_ID, DB_PW));
 		}
 		
