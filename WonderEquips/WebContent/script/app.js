@@ -59,7 +59,11 @@ angular.module('WonderEquips', ['ngCookies'])
 //		$scope.log();
 		
 		// reset all selector
-		$scope.reset();
+		try {
+			$scope.reset();
+		} catch (e) {
+			//console.log(e);
+		}
 	}
 	
 	/**
@@ -81,8 +85,14 @@ angular.module('WonderEquips', ['ngCookies'])
 		$scope.selectedShapes[i]++;
 	}
 	
+	$scope.selectFilterElement = function(i) {
+		$scope.currentElement = i;
+		$scope.search();
+	}
+	
 	$scope.reset = function() {
 		$scope.selectPart(0);
+		$scope.selectFilterElement();
 		$scope.selectedShapesSum = 0;
 		$scope.selectedShapes = [0, 0, 0, 0, 0, 0];
 		$scope.result = [];
@@ -97,9 +107,17 @@ angular.module('WonderEquips', ['ngCookies'])
 		
 		$scope.result = [];
 		for (idx in $scope.champs) {
-			var req = $scope.champs[idx].skill[$scope.currentPart];
+			var ch = $scope.champs[idx];
+			
+			// adjusting filter
+			if ($scope.currentElement !== undefined
+					&& $scope.currentElement != ch.element) {
+				continue;
+			}
+			
+			var req = ch.skill[$scope.currentPart];
 			if (($scope.includeEmpty && !req) || req && $scope.check(req)) {
-				$scope.result.push($scope.champs[idx]);
+				$scope.result.push(ch);
 			}
 		}
 	}

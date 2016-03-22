@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html data-ng-app="WonderEquips">
 <head>
-<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minumum-scale=1.0, width=device-width, height=device-height">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Cache-Control" content="no-cache"/> 
@@ -19,8 +19,9 @@
 <style type="text/css">
 body { padding-top: 70px; }
 
-nav.navbar p { margin-right: 15px; }
-nav.navbar p.btn-user { cursor: pointer; }
+nav.navbar ul.dropdown-menu { min-width: 240px; }
+nav.navbar ul.dropdown-menu span.badge.status-on { background-color: green; }
+nav.navbar ul.dropdown-menu span.badge.status-off { background-color: grey; }
 
 table {
 	border: 1px solid #ddd;
@@ -34,7 +35,6 @@ table td {
 	border: 1px solid #ddd;
 	cursor: pointer;
 	padding: 25px;
-	width: 33%;
 	text-align: center;
 }
 
@@ -42,13 +42,15 @@ table td.selected {
 	background-color: #eee;
 }
 
-table#part-selector td { padding: 10px; }
+table#part-selector td { padding: 10px; width: 33%; }
 
-table#shape-selector td { padding: 16px; }
+table#shape-selector td { padding: 16px; width: 33%; }
 table#shape-selector img { widht: 32px; height: 32px; }
 
 div#preview { margin-bottom: 15px; text-align: center; }
 div#preview img { margin: 8px; widht: 32px; height: 32px; }
+
+table#element-selector td { width: 16.6667%; padding: 10px; }
 
 table#executor td { padding: 10px; }
 table#executor td:first-child { width: 66%; }
@@ -69,23 +71,50 @@ ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px;
 <body data-ng-controller="MainController" data-ng-init="init()">
 
 	<nav class="navbar navbar-default navbar-fixed-top">
-		<a class="navbar-brand" href="#">WonderEquips</a>
-		<!-- <p class="navbar-text navbar-right">created by Kitchu</p> -->
-		<p class="navbar-text navbar-right btn-user" data-toggle="modal" data-target="#popup">
-			Watched <span class="badge">{{watchedChampCount}}</span>
-		</p>
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" aria-expanded="false"
+					data-toggle="collapse" data-target="#navbar-top">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">WonderEquips</a>
+			</div>
+			
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="navbar-top">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" data-toggle="modal" data-target="#popup">Watched <span class="badge">{{watchedChampCount}}</span></a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" role="button" aria-haspopup="true"
+							data-toggle="dropdown" aria-expanded="false">
+							Setting
+							<span class="glyphicon glyphicon-cog"></span>
+						</a>
+						<ul class="dropdown-menu" style="min-width: 300px;">
+							<li><a href="#"
+								data-ng-click="toggleIncludeEmpty()"
+								data-ng-class="getClassIncludeEmpty()">
+								스킬 미보유 영웅 포함
+								<span class="badge status-on pull-right" data-ng-show="includeEmpty">On</span>
+								<span class="badge status-off pull-right" data-ng-show="!includeEmpty">Off</span>
+							</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
 	</nav>
 	
 	<div class="container">
 	
 		<table id="part-selector">
 			<tr>
-				<td data-ng-click="selectPart(0)"
-					data-ng-class="currentPart == 0 ? 'selected' : ''">무기</td>							
-				<td data-ng-click="selectPart(1)"
-					data-ng-class="currentPart == 1 ? 'selected' : ''">방어구</td>
-				<td data-ng-click="selectPart(2)"
-					data-ng-class="currentPart == 2 ? 'selected' : ''">악세사리</td>
+				<td data-ng-click="selectPart(0)" data-ng-class="currentPart == 0 ? 'selected' : ''">무기</td>							
+				<td data-ng-click="selectPart(1)" data-ng-class="currentPart == 1 ? 'selected' : ''">방어구</td>
+				<td data-ng-click="selectPart(2)" data-ng-class="currentPart == 2 ? 'selected' : ''">악세사리</td>
 			</tr>
 		</table>
 	
@@ -111,6 +140,19 @@ ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px;
 			<img src="image/star_black.png" data-ng-repeat="_ in range(selectedShapes[5]) track by $index"/>
 		</div>
 		
+		<div id="filter">
+			<table id="element-selector">
+				<tr>
+					<td data-ng-click="selectFilterElement()" data-ng-class="currentElement == undefined ? 'selected' : ''">모두</td>							
+					<td data-ng-click="selectFilterElement(0)" data-ng-class="currentElement == 0 ? 'selected' : ''">불</td>
+					<td data-ng-click="selectFilterElement(1)" data-ng-class="currentElement == 1 ? 'selected' : ''">물</td>
+					<td data-ng-click="selectFilterElement(2)" data-ng-class="currentElement == 2 ? 'selected' : ''">나무</td>
+					<td data-ng-click="selectFilterElement(3)" data-ng-class="currentElement == 3 ? 'selected' : ''">빛</td>
+					<td data-ng-click="selectFilterElement(4)" data-ng-class="currentElement == 4 ? 'selected' : ''">어둠</td>
+				</tr>
+			</table>
+		</div>
+		
 		<table id="executor">
 			<tr>
 				<td data-ng-click="search()">검색</td>							
@@ -129,9 +171,7 @@ ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px;
 					</span>
 					<span class="type">{{getChampElement(champ.element)}}</span>
 					<span class="type">{{getChampType(champ.type)}}</span>
-					<span class="glyphicon glyphicon-ok pull-right" 
-						style="color: green;"
-						data-ng-show="champ.watch"></span>
+					<span class="glyphicon glyphicon-ok pull-right" style="color: green;" data-ng-show="champ.watch"></span>
 				</div>
 				<div class="body">
 					<div class="panel panel-default skill" 
@@ -163,15 +203,6 @@ ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px;
 							<input id="popupSearchText" type="text" class="form-control"
 								data-ng-model="popupSearchText"> 
 						</div>
-						<div class="form-group">
-							<a href="#" class="btn btn-default"
-								data-ng-click="toggleIncludeEmpty()"
-								data-ng-class="getClassIncludeEmpty()">
-								스킬 미보유 영웅 포함
-								<span class="glyphicon glyphicon-ok" 
-									data-ng-show="includeEmpty"></span>
-							</a>
-						</div>
 					</form>
 				</div>
 				<div class="modal-body">
@@ -190,6 +221,10 @@ ul#result li .body div.skill img { widht: 24px; height: 24px; margin-right: 6px;
 			</div>
 		</div>
 	</div>
+	
+	<!-- <div style="width: 100%; height: 100%; background: rgba(0,0,0,0.5); opacity: 0.7; position: absolute; top: 0px; left: 0px; z-index: 1050;">
+		<div style="width: 300px; height: 200px; background: transparent; position: absolute; top: 10px; left: 10px;"></div>
+	</div> -->
 
 </body>
 </html>
