@@ -51,19 +51,17 @@ angular.module('WonderEquips', ['ngCookies'])
 			
 			if (watchids) {
 				console.log('Request to load prewatched ids data to server.');
-				$scope.load(watchids);
+				$scope.savePreset(watchids);
 			}
 		}
 		
 		// send access log to server
-//		$scope.log();
+		$scope.log('access');
 		
 		// reset all selector
 		try {
 			$scope.reset();
-		} catch (e) {
-			//console.log(e);
-		}
+		} catch (e) { /* ignored */ }
 	}
 	
 	/**
@@ -120,6 +118,8 @@ angular.module('WonderEquips', ['ngCookies'])
 				$scope.result.push(ch);
 			}
 		}
+		
+		$scope.log('search');
 	}
 	
 	// display functions
@@ -168,7 +168,7 @@ angular.module('WonderEquips', ['ngCookies'])
 			if ($scope.champs[i].id == id) {
 				$scope.champs[i].watch = !$scope.champs[i].watch;
 				if ($scope.champs[i].watch) {
-					$scope.load($scope.champs[i].id);
+					$scope.savePreset($scope.champs[i].id);
 				}
 				break;
 			}
@@ -178,23 +178,48 @@ angular.module('WonderEquips', ['ngCookies'])
 	}
 	
 	// send access log function
-	$scope.log = function() {
+	$scope.log = function(type) {
 		$.ajax({
-			url: '/WonderEquips/service/log' 
+			url: '/WonderEquips/service/log'
+				+ '/' + type
 				+ '/' + app.currentVersion
 				+ '/' + $scope.token,
 			method: 'POST'
 		});
 	}
 	
-	// data load function
-	$scope.load = function(ids) {
+	// save preset data function
+	$scope.savePreset = function(ids) {
 		$.ajax({
-			url: '/WonderEquips/service/load' 
+			url: '/WonderEquips/service/savePreset' 
 				+ '/' + app.currentVersion
 				+ '/' + $scope.token
 				+ '/' + ids,
 			method: 'POST'
+		});
+	}
+	
+	// send access log function
+	$scope.sendMessage = function() {
+		if ($scope.sending) return false;
+		$scope.sending = true;
+		
+		$.ajax({
+			url: '/WonderEquips/service/message'
+				+ '/' + app.currentVersion
+				+ '/' + $scope.token
+				+ '/' + $scope.popupMessageText,
+			method: 'POST',
+			success: function(res) { $('#popup-message .alert.alert-success').show(); },
+			error: function() { $('#popup-message .alert.alert-danger').show(); },
+			complete: function() {
+				setTimeout(function() {
+					$('#popup-message').modal('hide');
+					$('#popup-message .alert').hide();
+					$scope.popupMessageText = '';
+					$scope.sending = false;
+				}, 2500);
+			}
 		});
 	}
 	

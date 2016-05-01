@@ -1,5 +1,5 @@
 app = {
-	currentVersion : "2.4",
+	currentVersion : "2.5",
 	contextUrl : "kitchu.lazecrew.com/WonderEquips"
 };
 

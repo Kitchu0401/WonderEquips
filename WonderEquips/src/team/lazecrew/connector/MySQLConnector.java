@@ -26,7 +26,9 @@ public class MySQLConnector {
 	private static final String DB_PW = "apdoer1234";
 	
 	// queries
-	private static final String QUERY_INSERT_ACCESS_LOG = " INSERT INTO log_access VALUES (?, ?, now()) ";
+	private static final String QUERY_INSERT_ACCESS_LOG = " INSERT INTO log_access VALUES (now(), ?, ?) ";
+	private static final String QUERY_INSERT_SEARCH_LOG = " INSERT INTO log_search VALUES (now(), ?, ?) ";
+	private static final String QUERY_INSERT_MESSAGE = " INSERT INTO message VALUES (now(), ?, ?, ?) ";
 	private static final String QUERY_INSERT_DATA = " INSERT IGNORE INTO watchids VALUES (?, ?, ?) ";
 	
 	private static Connection connection;
@@ -58,7 +60,7 @@ public class MySQLConnector {
 			pstmt.setString(2, token);
 			resultCount = pstmt.executeUpdate();
 			
-			LOGGER.info(String.format("Row inserted: [%s][%s]", version, token));
+			LOGGER.info(String.format("Access log inserted: [%s][%s]", version, token));
 		} catch (Exception e) {
 			LOGGER.error("An error occured in processing DB task :");
 			e.printStackTrace();
@@ -67,7 +69,29 @@ public class MySQLConnector {
 		return resultCount;
 	}
 	
-	public static int insertData(String version, String token, String id) {
+	public static int insertSearchLog(String version, String token) {
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		
+		int resultCount = 0;
+		
+		try {
+			connection = getConnection();
+			pstmt = connection.prepareStatement(QUERY_INSERT_SEARCH_LOG);
+			pstmt.setString(1, version);
+			pstmt.setString(2, token);
+			resultCount = pstmt.executeUpdate();
+			
+			LOGGER.info(String.format("Search log inserted: [%s][%s]", version, token));
+		} catch (Exception e) {
+			LOGGER.error("An error occured in processing DB task :");
+			e.printStackTrace();
+		}
+		
+		return resultCount;
+	}
+	
+	public static int insertPresetData(String version, String token, String id) {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		
@@ -81,7 +105,7 @@ public class MySQLConnector {
 			pstmt.setInt(3, Integer.parseInt(id));
 			resultCount = pstmt.executeUpdate();
 			
-			LOGGER.info(String.format("Row inserted: [%s][%s][%s]", version, token, id));
+			LOGGER.info(String.format("Preset data inserted: [%s][%s][%s]", version, token, id));
 		} catch (MySQLIntegrityConstraintViolationException dupKeyEx) { 
 			LOGGER.debug(String.format("Data Already exists: [%s][%s][%s]", version, token, id));
 		} catch (Exception e) {
@@ -92,7 +116,7 @@ public class MySQLConnector {
 		return resultCount;
 	}
 	
-	public static int insertData(String version, String token, String[] ids) {
+	public static int insertPresetData(String version, String token, String[] ids) {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		
@@ -125,6 +149,29 @@ public class MySQLConnector {
 		}
 		
 		LOGGER.info(String.format("Batch completed: %d rows inserted of %d rows", ids.length, resultCount));
+		return resultCount;
+	}
+
+	public static int insertMessage(String version, String token, String message) {
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		
+		int resultCount = 0;
+		
+		try {
+			connection = getConnection();
+			pstmt = connection.prepareStatement(QUERY_INSERT_MESSAGE);
+			pstmt.setString(1, version);
+			pstmt.setString(2, token);
+			pstmt.setString(3, message);
+			resultCount = pstmt.executeUpdate();
+			
+			LOGGER.info(String.format("Search log inserted: [%s][%s][message]", version, token, message));
+		} catch (Exception e) {
+			LOGGER.error("An error occured in processing DB task :");
+			e.printStackTrace();
+		}
+		
 		return resultCount;
 	}
 	
