@@ -1,5 +1,5 @@
 app = {
-	currentVersion : "2.4",
+	currentVersion : "2.5",
 	contextUrl : "kitchu.lazecrew.com/WonderEquips"
 };
 
@@ -1011,6 +1011,43 @@ champs = [ {
 	"name" : "스노이아",
 	"grade" : 6,
 	"type" : 2
+}, {
+	"id" : 144,
+	"element" : 2,
+	"skill" : [ [ 1, 0, 0, 1, 0 ], [ 0, 1, 0, 1, 1 ], [ 0, 0, 2, 1, 0 ] ],
+	"name" : "엘라이",
+	"grade" : 6,
+	"type" : 2
+}, {
+	"id" : 145,
+	"element" : 0,
+	"skill" : [ [ 0, 1, 0, 1, 1 ], [ 1, 0, 0, 1, 0 ], [ 0, 0, 1, 1, 1 ] ],
+	"name" : "메라이",
+	"grade" : 6,
+	"type" : 2
+}, {
+	"id" : 146,
+	"element" : 4,
+	"skill" : [ [ 0, 0, 0, 0, 2 ], [ 0, 0, 0, 0, 2 ], [ 0, 1, 0, 1, 1 ] ],
+	"name" : "루시페르",
+	"grade" : 5,
+	"type" : 0
+}, {
+	"id" : 147,
+	"element" : 3,
+	"skill" : [ null, [ 0, 0, 1, 1, 0 ], [ 0, 1, 0, 1, 1 ] ],
+	"name" : "루시엘",
+	"grade" : 4,
+	"type" : 1
+}, {
+	"id" : 148,
+	"element" : 1,
+	"skill" : [ [ 1, 0, 0, 1, 0 ], null, [ 0, 1, 0, 1, 1 ] ],
+	"name" : "쿠라이",
+	"grade" : 3,
+	"type" : 2
 } ]
 
+// 불, 물, 나무, 빛, 어둠
 // 원, 마름모, 사각형, 세모, 하트
+// 공격형, 방어형, 지원형

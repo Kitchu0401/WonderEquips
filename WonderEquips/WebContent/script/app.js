@@ -51,15 +51,17 @@ angular.module('WonderEquips', ['ngCookies'])
 			
 			if (watchids) {
 				console.log('Request to load prewatched ids data to server.');
-				$scope.load(watchids);
+				$scope.savePreset(watchids);
 			}
 		}
 		
 		// send access log to server
-		$scope.log();
+		$scope.log('access');
 		
 		// reset all selector
-		$scope.reset();
+		try {
+			$scope.reset();
+		} catch (e) { /* ignored */ }
 	}
 	
 	/**
@@ -81,8 +83,14 @@ angular.module('WonderEquips', ['ngCookies'])
 		$scope.selectedShapes[i]++;
 	}
 	
+	$scope.selectFilterElement = function(i) {
+		$scope.currentElement = i;
+		$scope.search();
+	}
+	
 	$scope.reset = function() {
 		$scope.selectPart(0);
+		$scope.selectFilterElement();
 		$scope.selectedShapesSum = 0;
 		$scope.selectedShapes = [0, 0, 0, 0, 0, 0];
 		$scope.result = [];
@@ -97,11 +105,21 @@ angular.module('WonderEquips', ['ngCookies'])
 		
 		$scope.result = [];
 		for (idx in $scope.champs) {
-			var req = $scope.champs[idx].skill[$scope.currentPart];
-			if (($scope.includeEmpty) || req && $scope.check(req)) {
-				$scope.result.push($scope.champs[idx]);
+			var ch = $scope.champs[idx];
+			
+			// adjusting filter
+			if ($scope.currentElement !== undefined
+					&& $scope.currentElement != ch.element) {
+				continue;
+			}
+			
+			var req = ch.skill[$scope.currentPart];
+			if (($scope.includeEmpty && !req) || req && $scope.check(req)) {
+				$scope.result.push(ch);
 			}
 		}
+		
+		$scope.log('search');
 	}
 	
 	// display functions
@@ -150,7 +168,7 @@ angular.module('WonderEquips', ['ngCookies'])
 			if ($scope.champs[i].id == id) {
 				$scope.champs[i].watch = !$scope.champs[i].watch;
 				if ($scope.champs[i].watch) {
-					$scope.load($scope.champs[i].id);
+					$scope.savePreset($scope.champs[i].id);
 				}
 				break;
 			}
@@ -160,23 +178,48 @@ angular.module('WonderEquips', ['ngCookies'])
 	}
 	
 	// send access log function
-	$scope.log = function() {
+	$scope.log = function(type) {
 		$.ajax({
-			url: '/WonderEquips/service/log' 
+			url: '/WonderEquips/service/log'
+				+ '/' + type
 				+ '/' + app.currentVersion
 				+ '/' + $scope.token,
 			method: 'POST'
 		});
 	}
 	
-	// data load function
-	$scope.load = function(ids) {
+	// save preset data function
+	$scope.savePreset = function(ids) {
 		$.ajax({
-			url: '/WonderEquips/service/load' 
+			url: '/WonderEquips/service/savePreset' 
 				+ '/' + app.currentVersion
 				+ '/' + $scope.token
 				+ '/' + ids,
 			method: 'POST'
+		});
+	}
+	
+	// send access log function
+	$scope.sendMessage = function() {
+		if ($scope.sending) return false;
+		$scope.sending = true;
+		
+		$.ajax({
+			url: '/WonderEquips/service/message'
+				+ '/' + app.currentVersion
+				+ '/' + $scope.token
+				+ '/' + $scope.popupMessageText,
+			method: 'POST',
+			success: function(res) { $('#popup-message .alert.alert-success').show(); },
+			error: function() { $('#popup-message .alert.alert-danger').show(); },
+			complete: function() {
+				setTimeout(function() {
+					$('#popup-message').modal('hide');
+					$('#popup-message .alert').hide();
+					$scope.popupMessageText = '';
+					$scope.sending = false;
+				}, 2500);
+			}
 		});
 	}
 	
