@@ -28,12 +28,15 @@ public class MySQLConnector {
 	private MySQLConnector() { /* block */ }
 	
 	private static Connection getConnection() throws Exception {
+		String param_autoReconnection = "autoReconnection=true";
+		
 		if (connection == null) {
 			// create new connection
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			connection = DriverManager.getConnection(String.format(
-					"jdbc:mysql://%s:%s/%s?user=%s&password=%s", 
-					DB_ADDR, DB_PORT, DB_SCHM, DB_ID, DB_PW));
+					"jdbc:mysql://%s:%s/%s?user=%s&password=%s?%s", 
+					DB_ADDR, DB_PORT, DB_SCHM, DB_ID, DB_PW,
+					param_autoReconnection));
 		}
 		
 		return connection;
